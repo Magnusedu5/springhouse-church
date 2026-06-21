@@ -14,12 +14,12 @@ const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api';
 
 // Maps real ministry slugs to their gallery destination key
 const MINISTRY_DESTINATIONS: Record<string, GalleryDestination> = {
-  'childrens-ministry': 'ministry_children',
-  'youth-ministry': 'ministry_youth',
-  'mens-fellowship': 'ministry_men',
+  'noble-men': 'ministry_men',
   'womens-fellowship': 'ministry_women',
-  'missions-outreach': 'ministry_missions',
-  'worship-team': 'ministry_worship',
+  'youth-teens-church': 'ministry_youth',
+  'the-springhouse-choir': 'ministry_worship',
+  'church-care': 'ministry_children',
+  'celebration-church': 'ministry_missions',
 };
 
 async function getMinistry(slug: string): Promise<Ministry | null> {
