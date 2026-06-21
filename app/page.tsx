@@ -1,101 +1,144 @@
-import Image from "next/image";
+import Image from 'next/image';
+import Link from 'next/link';
+import LiveStreamBanner from '@/components/LiveStreamBanner';
+import GiveButton from '@/components/GiveButton';
+import PrayerForm from '@/components/PrayerForm';
+import FadeIn from '@/components/FadeIn';
+import SermonSection from '@/components/SermonSection';
+import EventsSection from '@/components/EventsSection';
+import NewHereSection from '@/components/NewHereSection';
+import HeroSection from '@/components/HeroSection';
+import CountUp from '@/components/CountUp';
+import { DriftIn } from '@/components/motion';
+import FadedBackgroundPhoto from '@/components/FadedBackgroundPhoto';
+import WhoWeAreImage from '@/components/WhoWeAreImage';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <>
+      {/* ─────────────────────────── 1. HERO ─────────────────────────── */}
+      <HeroSection />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* ─────────────────── 2. LIVE STREAM BANNER ───────────────────── */}
+      <LiveStreamBanner isLive={false} streamUrl="" />
+
+      {/* ─────────────────────── 3. WHO WE ARE ───────────────────────── */}
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-brand-warm overflow-hidden" aria-label="Who we are">
+        <FadedBackgroundPhoto destination="bg_who_we_are" />
+        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+          {/* Left: Image */}
+          <DriftIn direction="left">
+            <div className="relative h-80 lg:h-[500px] rounded-2xl overflow-hidden shadow-lg">
+              <WhoWeAreImage />
+            </div>
+          </DriftIn>
+
+          {/* Right: Text */}
+          <DriftIn direction="right" delay={0.15}>
+            <div>
+              <div className="flex items-center mb-3 gap-3">
+                <div className="h-px w-8 bg-brand-gold" />
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-gold">Our Heart</p>
+              </div>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-brand-blue mb-6 leading-[1.2]">
+                A Church for Every Nation
+              </h2>
+              <p className="text-gray-600 leading-relaxed mb-5">
+                To bring the lost to the saving knowledge of Christ and to mature believers who
+                will minister across the seas. The SpringHouse Church was founded with a heart
+                for Calabar and a vision that reaches far beyond our city — to every nation on earth.
+              </p>
+              <p className="font-display italic text-brand-gold text-lg mb-8 pl-4 border-l-2 border-brand-gold">
+                &ldquo;All the ends of the world shall remember and turn to the Lord.&rdquo;
+                <span className="block text-sm mt-1 not-italic">— Matthew 28:19</span>
+              </p>
+              <Link
+                href="/about"
+                className="inline-flex items-center text-brand-red font-medium hover:text-brand-blue transition-colors focus:outline-none focus:underline"
+              >
+                Meet Our Pastor →
+              </Link>
+            </div>
+          </DriftIn>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </section>
+
+      {/* ─────────────────── 4. LATEST SERMON ────────────────────────── */}
+      <FadeIn>
+        <SermonSection />
+      </FadeIn>
+
+      {/* ─────────────────── 5. UPCOMING EVENTS ──────────────────────── */}
+      <FadeIn>
+        <EventsSection />
+      </FadeIn>
+
+      {/* ──────────── 6. NEW HERE / FIRST STEPS ─────────────────────── */}
+      <FadeIn>
+        <NewHereSection />
+      </FadeIn>
+
+      {/* ───────────────────────── 7. GIVE ───────────────────────────── */}
+      <FadeIn>
+        <section
+          data-navbar-dark
+          className="relative py-20 px-4 sm:px-6 lg:px-8 bg-brand-blue overflow-hidden"
+          aria-label="Give"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <FadedBackgroundPhoto destination="bg_give" />
+
+          {/* Gold cross watermark */}
+          <svg
+            className="absolute inset-0 w-full h-full opacity-[0.06] pointer-events-none animate-float-gentle"
+            aria-hidden="true"
+            preserveAspectRatio="xMidYMid slice"
+            viewBox="0 0 200 200"
+          >
+            <rect x="92" y="20" width="16" height="160" fill="#D4A017" />
+            <rect x="30" y="76" width="140" height="16" fill="#D4A017" />
+          </svg>
+
+          <div className="relative z-10 max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-10">
+            <div className="text-center lg:text-left max-w-xl">
+              <h2 className="font-display text-4xl sm:text-5xl font-bold mb-5 leading-[1.2] shimmer-gold inline-block">
+                Support the Mission
+              </h2>
+              <p className="text-white/70 leading-relaxed mb-4">
+                Your giving enables ministry across the street — in Calabar&apos;s homes, schools,
+                and communities — and across the seas, funding missionaries and reaching thousands
+                of online members around the globe. Every gift makes a difference.
+              </p>
+              <p className="text-white/90 text-sm">
+                {/* TODO: Replace with real stats from API */}
+                <CountUp end={2000} suffix="+" className="text-brand-gold font-display text-2xl font-semibold" />
+                {' '}members online
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <GiveButton variant="primary" size="lg" label="Give Online" />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* ─────────────────── 8. PRAYER REQUEST ───────────────────────── */}
+      <FadeIn>
+        <section data-navbar-dark className="river-bg-slow py-20 px-4 sm:px-6 lg:px-8" aria-label="Prayer request">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-brand-gold mb-3">
+              Prayer
+            </p>
+            <h2 className="font-display text-4xl sm:text-5xl font-semibold text-white mb-4">
+              We&apos;re Praying With You
+            </h2>
+            <p className="text-white/70 mb-10 leading-relaxed">
+              Send us your prayer request. Our prayer team prays over every submission.
+            </p>
+            <PrayerForm />
+          </div>
+        </section>
+      </FadeIn>
+    </>
   );
 }
