@@ -11,7 +11,7 @@ interface Props {
 
 export default function MinistryCard({ ministry, galleryDestination }: Props) {
   const { primary } = useGalleryPhotos(galleryDestination ?? 'ministry_children');
-  const imageSrc = ministry.image || (galleryDestination ? primary?.image : undefined);
+  const imageSrc = (galleryDestination ? primary?.image : undefined) || ministry.image || undefined;
 
   return (
     <Link
