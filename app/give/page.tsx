@@ -80,7 +80,7 @@ export default function GivePage() {
         style={{ minHeight: '50vh' }}
         aria-label="Give page hero"
       >
-        <HeroBackground destination="hero_give" fallbackSrc="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1920&q=80" />
+        <HeroBackground destination="hero_give" />
         <div className="absolute inset-0 bg-brand-blue/70" aria-hidden="true" />
         <div className="absolute inset-0 bg-cross-pattern opacity-10" aria-hidden="true" />
         <div className="relative z-10 max-w-2xl mx-auto py-24">

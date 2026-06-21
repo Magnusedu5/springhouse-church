@@ -15,7 +15,7 @@ export default function SermonsPage() {
         style={{ minHeight: '40vh' }}
         aria-label="Sermons page hero"
       >
-        <HeroBackground destination="hero_sermons" fallbackSrc="https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1920&q=80" />
+        <HeroBackground destination="hero_sermons" />
         <div className="absolute inset-0 bg-brand-blue/80" aria-hidden="true" />
         <div className="relative z-10">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-gold mb-4">

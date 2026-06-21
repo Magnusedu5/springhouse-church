@@ -24,7 +24,7 @@ export default function EventsPage() {
         style={{ minHeight: '40vh' }}
         aria-label="Events page hero"
       >
-        <HeroBackground destination="hero_events" fallbackSrc="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1920&q=80" />
+        <HeroBackground destination="hero_events" />
         <div className="absolute inset-0 bg-brand-blue/80" aria-hidden="true" />
         {/* Cross pattern watermark */}
         <div className="absolute inset-0 bg-cross-pattern opacity-10" aria-hidden="true" />

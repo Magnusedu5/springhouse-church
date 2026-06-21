@@ -60,7 +60,7 @@ export default async function BlogPage() {
         style={{ minHeight: '40vh' }}
         aria-label="Blog page hero"
       >
-        <HeroBackground destination="hero_blog" fallbackSrc="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1920&q=80" />
+        <HeroBackground destination="hero_blog" />
         <div className="absolute inset-0 bg-brand-blue/80" aria-hidden="true" />
         <div className="absolute inset-0 bg-cross-pattern opacity-10" aria-hidden="true" />
         <div className="relative z-10 max-w-2xl mx-auto py-20">

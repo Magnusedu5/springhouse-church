@@ -116,12 +116,7 @@ const beliefs = [
   },
 ];
 
-// TODO: Replace with real leadership data
-const leaders = [
-  { initials: 'TBC', name: 'Name', title: 'Worship Pastor', bg: 'bg-brand-blue/20' },
-  { initials: 'TBC', name: 'Name', title: 'Youth & Young Adults Pastor', bg: 'bg-brand-red/10' },
-  { initials: 'TBC', name: 'Name', title: 'Administrative Pastor', bg: 'bg-brand-gold/20' },
-];
+const leaders: { initials: string; name: string; title: string; bg: string }[] = [];
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -135,7 +130,7 @@ export default function AboutPage() {
         style={{ minHeight: '50vh' }}
         aria-label="About page hero"
       >
-        <HeroBackground destination="hero_about" fallbackSrc="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1920&q=80" />
+        <HeroBackground destination="hero_about" />
 
         {/* Subtle dark overlay + cross pattern to deepen the photo */}
         <div className="absolute inset-0 bg-brand-blue/80 bg-cross-pattern" aria-hidden="true" />
@@ -373,37 +368,39 @@ export default function AboutPage() {
       </section>
 
       {/* ──────────────────── 6. LEADERSHIP TEAM ────────────────────── */}
-      <section className="bg-brand-cream py-20 px-4 sm:px-6 lg:px-8" aria-label="Leadership team">
-        <div className="max-w-5xl mx-auto">
-          <FadeIn>
-            <div className="text-center mb-14">
-              <p className="text-xs font-semibold uppercase tracking-widest text-brand-gold mb-3">
-                The Team
-              </p>
-              <h2 className="font-display text-4xl sm:text-5xl font-semibold text-brand-blue">
-                Our Leadership
-              </h2>
-            </div>
-          </FadeIn>
+      {leaders.length > 0 && (
+        <section className="bg-brand-cream py-20 px-4 sm:px-6 lg:px-8" aria-label="Leadership team">
+          <div className="max-w-5xl mx-auto">
+            <FadeIn>
+              <div className="text-center mb-14">
+                <p className="text-xs font-semibold uppercase tracking-widest text-brand-gold mb-3">
+                  The Team
+                </p>
+                <h2 className="font-display text-4xl sm:text-5xl font-semibold text-brand-blue">
+                  Our Leadership
+                </h2>
+              </div>
+            </FadeIn>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {leaders.map(({ initials, name, title, bg }, i) => (
-              <FadeIn key={title} delay={i * 100}>
-                <div className="text-center">
-                  <LeaderPhoto
-                    destination={(['leadership_1_photo', 'leadership_2_photo', 'leadership_3_photo'] as const)[i]}
-                    name={name}
-                    initials={initials}
-                    bg={bg}
-                  />
-                  <h3 className="font-display text-xl font-semibold text-brand-blue mb-1">{name}</h3>
-                  <p className="text-gray-500 text-sm">{title}</p>
-                </div>
-              </FadeIn>
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              {leaders.map(({ initials, name, title, bg }, i) => (
+                <FadeIn key={title} delay={i * 100}>
+                  <div className="text-center">
+                    <LeaderPhoto
+                      destination={(['leadership_1_photo', 'leadership_2_photo', 'leadership_3_photo'] as const)[i]}
+                      name={name}
+                      initials={initials}
+                      bg={bg}
+                    />
+                    <h3 className="font-display text-xl font-semibold text-brand-blue mb-1">{name}</h3>
+                    <p className="text-gray-500 text-sm">{title}</p>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ──────────────────── 7. NEW HERE? ───────────────────────────── */}
       <section className="bg-brand-red py-20 px-4 sm:px-6 lg:px-8" aria-label="First time visitor">

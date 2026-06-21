@@ -88,7 +88,7 @@ export default function ContactPage() {
         style={{ minHeight: '40vh' }}
         aria-label="Contact page hero"
       >
-        <HeroBackground destination="hero_contact" fallbackSrc="https://images.unsplash.com/photo-1522543558187-768b6df7c25c?auto=format&fit=crop&w=1920&q=80" />
+        <HeroBackground destination="hero_contact" />
         <div className="absolute inset-0 bg-brand-blue/80" aria-hidden="true" />
         <div className="absolute inset-0 bg-cross-pattern opacity-10" aria-hidden="true" />
         <div className="relative z-10 max-w-2xl mx-auto py-20">

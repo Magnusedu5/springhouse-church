@@ -126,7 +126,7 @@ export default async function MinistriesPage() {
         style={{ minHeight: '40vh' }}
         aria-label="Ministries hero"
       >
-        <HeroBackground destination="hero_ministries" fallbackSrc="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1920&q=80" />
+        <HeroBackground destination="hero_ministries" />
         <div className="absolute inset-0 bg-brand-blue/80" aria-hidden="true" />
         <div className="relative z-10">
           <FadeIn>

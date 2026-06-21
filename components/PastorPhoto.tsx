@@ -16,7 +16,5 @@ export default function PastorPhoto() {
     );
   }
 
-  return (
-    <span className="font-display text-4xl font-semibold text-brand-gold select-none">PJL</span>
-  );
+  return null;
 }
