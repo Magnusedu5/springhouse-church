@@ -21,7 +21,7 @@ const variantClasses: Record<string, string> = {
 export default function GiveButton({
   variant = 'primary',
   size = 'md',
-  label = 'Give Now',
+  label = 'Sow a Seed',
   href = '/give',
 }: Props) {
   return (

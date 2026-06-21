@@ -6,7 +6,7 @@ const SUBJECTS = [
   'New Member',
   'Ministry',
   'Prayer Request',
-  'Give',
+  'Sow a Seed',
 ] as const;
 
 type Subject = (typeof SUBJECTS)[number];

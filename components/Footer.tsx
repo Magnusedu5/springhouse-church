@@ -13,7 +13,7 @@ const quickLinks = [
   { href: '/events', label: 'Events' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
-  { href: '/give', label: 'Give' },
+  { href: '/give', label: 'Sow a Seed' },
 ];
 
 const memberLinks = [

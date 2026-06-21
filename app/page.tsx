@@ -84,7 +84,7 @@ export default function HomePage() {
         <section
           data-navbar-dark
           className="relative py-20 px-4 sm:px-6 lg:px-8 bg-brand-blue overflow-hidden"
-          aria-label="Give"
+          aria-label="Sow a Seed"
         >
           <FadedBackgroundPhoto destination="bg_give" />
 
@@ -116,7 +116,7 @@ export default function HomePage() {
               </p>
             </div>
             <div className="flex-shrink-0">
-              <GiveButton variant="primary" size="lg" label="Give Online" />
+              <GiveButton variant="primary" size="lg" label="Sow a Seed" />
             </div>
           </div>
         </section>

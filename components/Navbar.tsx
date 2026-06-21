@@ -131,7 +131,7 @@ export default function Navbar() {
                   : 'bg-gradient-to-br from-brand-red to-[#943E22] text-white shadow-sm hover:from-[#c4663e] hover:to-[#7a3018] focus:ring-brand-red focus:ring-offset-brand-cream'
               }`}
             >
-              Give
+              Sow a Seed
             </Link>
 
             <button
@@ -207,7 +207,7 @@ export default function Navbar() {
                   reduced ? '' : 'animate-give-pulse'
                 }`}
               >
-                Give
+                Sow a Seed
               </Link>
             </div>
           </motion.div>

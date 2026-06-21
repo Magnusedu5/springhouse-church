@@ -7,11 +7,11 @@ import { ScriptureReveal, CascadeGroup, CascadeItem, BounceIcon } from '@/compon
 import HeroBackground from '@/components/HeroBackground';
 
 export const metadata: Metadata = {
-  title: 'Give to the Mission — The SpringHouse Church',
+  title: 'Sow a Seed — The SpringHouse Church',
   description:
     'Support the work of The SpringHouse Church across the street and across the seas. Your giving fuels local ministry, online ministry, and global missions.',
   openGraph: {
-    title: 'Give to the Mission — The SpringHouse Church',
+    title: 'Sow a Seed — The SpringHouse Church',
     description:
       'Your giving fuels ministry across the street and across the seas.',
   },
@@ -89,7 +89,7 @@ export default function GivePage() {
               Partner With Us
             </p>
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-semibold text-white mb-6 leading-tight">
-              Give to the Mission
+              Sow a Seed
             </h1>
             <p className="text-white/70 text-lg sm:text-xl mb-8">
               Your giving fuels ministry across the street and across the seas.
@@ -117,7 +117,7 @@ export default function GivePage() {
                 Your Impact
               </p>
               <h2 className="font-display text-4xl sm:text-5xl font-semibold text-brand-blue">
-                Why We Give
+                Why We Sow
               </h2>
             </div>
           </FadeIn>
@@ -149,10 +149,10 @@ export default function GivePage() {
           <FadeIn>
             <div className="text-center mb-12">
               <p className="text-xs font-semibold uppercase tracking-widest text-brand-gold mb-3">
-                Give Now
+                Sow Now
               </p>
               <h2 className="font-display text-4xl sm:text-5xl font-semibold text-brand-blue mb-3">
-                How to Give
+                How to Sow
               </h2>
               <p className="text-gray-500 leading-relaxed">
                 Choose the giving method that works best for you.
