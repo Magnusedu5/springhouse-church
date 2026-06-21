@@ -45,6 +45,14 @@ function YouTubeIcon() {
   );
 }
 
+function XIcon() {
+  return (
+    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
 export default function Footer() {
   const reduced = usePrefersReducedMotion();
 
@@ -73,9 +81,8 @@ export default function Footer() {
                 who will minister across the seas.
               </p>
               <div className="flex gap-4">
-                {/* TODO: Replace with real social profile URLs */}
                 <motion.a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/thespringhousecommunity"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="The SpringHouse Church on Facebook"
@@ -86,7 +93,7 @@ export default function Footer() {
                   <FacebookIcon />
                 </motion.a>
                 <motion.a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/thespringhousechurch"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="The SpringHouse Church on Instagram"
@@ -97,7 +104,7 @@ export default function Footer() {
                   <InstagramIcon />
                 </motion.a>
                 <motion.a
-                  href="https://youtube.com"
+                  href="https://www.youtube.com/@thespringhousecommunity5008"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="The SpringHouse Church on YouTube"
@@ -106,6 +113,17 @@ export default function Footer() {
                   className="text-white/70 hover:text-brand-gold transition-colors focus:outline-none focus:ring-2 focus:ring-white rounded"
                 >
                   <YouTubeIcon />
+                </motion.a>
+                <motion.a
+                  href="https://x.com/thespringhouse"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="The SpringHouse Church on X"
+                  whileHover={reduced ? {} : { scale: 1.2 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                  className="text-white/70 hover:text-brand-gold transition-colors focus:outline-none focus:ring-2 focus:ring-white rounded"
+                >
+                  <XIcon />
                 </motion.a>
               </div>
             </div>

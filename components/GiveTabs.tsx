@@ -29,8 +29,7 @@ function BankCard() {
   }
 
   function copyAccountNumber() {
-    // TODO: Replace placeholder with real account number
-    navigator.clipboard.writeText('0000000000').then(() => {
+    navigator.clipboard.writeText('0392039524').then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     });
@@ -57,8 +56,7 @@ function BankCard() {
             <p className="text-[10px] font-semibold uppercase tracking-widest text-brand-gold mb-0.5">
               Bank
             </p>
-            {/* TODO: Add bank name */}
-            <p className="text-white/50 text-sm italic">Coming soon — contact us for details</p>
+            <p className="font-medium text-base">Ecobank Nigeria Plc</p>
           </div>
 
           {/* Account number */}
@@ -66,9 +64,8 @@ function BankCard() {
             <p className="text-[10px] font-semibold uppercase tracking-widest text-brand-gold mb-1">
               Account Number
             </p>
-            {/* TODO: Replace with real account number */}
-            <p className="font-mono text-2xl sm:text-3xl tracking-[0.18em] font-semibold text-white/40 select-none">
-              •••• •••• ••••
+            <p className="font-mono text-2xl sm:text-3xl tracking-[0.18em] font-semibold">
+              0392039524
             </p>
           </div>
 
@@ -77,16 +74,7 @@ function BankCard() {
             <p className="text-[10px] font-semibold uppercase tracking-widest text-brand-gold mb-0.5">
               Account Name
             </p>
-            <p className="font-medium text-base">The SpringHouse Church</p>
-          </div>
-
-          {/* Sort / bank code */}
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-brand-gold mb-0.5">
-              Sort Code / Bank Code
-            </p>
-            {/* TODO: Add sort code */}
-            <p className="text-white/50 text-sm italic">Coming soon</p>
+            <p className="font-medium text-base">THE SPRING HOUSE CHURCH</p>
           </div>
         </div>
       </motion.div>

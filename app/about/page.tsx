@@ -345,7 +345,7 @@ export default function AboutPage() {
             <div className="flex items-center justify-center gap-5 mt-8">
               {/* TODO: Replace with real social URLs */}
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/austin.mboso"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Dr Austin Mboso on Facebook"
@@ -354,7 +354,7 @@ export default function AboutPage() {
                 <FacebookIcon />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/austinmboso"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Dr Austin Mboso on Instagram"
