@@ -1,5 +1,4 @@
-'use client';
-import useGalleryPhotos from '@/lib/useGalleryPhotos';
+import Image from 'next/image';
 
 interface SiteLogoProps {
   variant?: 'navbar' | 'footer';
@@ -7,8 +6,6 @@ interface SiteLogoProps {
 }
 
 export default function SiteLogo({ variant = 'navbar', isDark = false }: SiteLogoProps) {
-  const { primary } = useGalleryPhotos('logo');
-
   if (variant === 'footer') {
     return (
       <p className="font-display text-3xl font-semibold text-white mb-2 leading-snug">
@@ -17,22 +14,15 @@ export default function SiteLogo({ variant = 'navbar', isDark = false }: SiteLog
     );
   }
 
-  if (primary?.image) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={primary.image}
-        alt="The SpringHouse Church"
-        className="h-full w-auto max-w-[280px] object-contain"
-        // multiply removes white bg on cream; on dark sections skip it so the logo stays visible
-        style={isDark ? undefined : { mixBlendMode: 'multiply' }}
-      />
-    );
-  }
-
   return (
-    <span className="font-display text-xl font-semibold text-brand-blue leading-tight">
-      The SpringHouse Church
-    </span>
+    <Image
+      src="/logo.png"
+      alt="The SpringHouse Church"
+      width={280}
+      height={80}
+      priority
+      className="h-full w-auto max-w-[280px] object-contain"
+      style={isDark ? undefined : { mixBlendMode: 'multiply' }}
+    />
   );
 }
