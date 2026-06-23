@@ -6,7 +6,7 @@ import FadedBackgroundPhoto from '@/components/FadedBackgroundPhoto';
 import CongregationGallery from '@/components/CongregationGallery';
 import OurStoryImage from '@/components/OurStoryImage';
 import PastorPhoto from '@/components/PastorPhoto';
-import LeaderPhoto from '@/components/LeaderPhoto';
+import LeadershipSection from '@/components/LeadershipSection';
 
 // ─── Belief icons ────────────────────────────────────────────────────────────
 
@@ -115,8 +115,6 @@ const beliefs = [
     text: 'We believe every believer is called to go and make disciples of all nations — across the street and across the seas.',
   },
 ];
-
-const leaders: { initials: string; name: string; title: string; bg: string }[] = [];
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -368,39 +366,7 @@ export default function AboutPage() {
       </section>
 
       {/* ──────────────────── 6. LEADERSHIP TEAM ────────────────────── */}
-      {leaders.length > 0 && (
-        <section className="bg-brand-cream py-20 px-4 sm:px-6 lg:px-8" aria-label="Leadership team">
-          <div className="max-w-5xl mx-auto">
-            <FadeIn>
-              <div className="text-center mb-14">
-                <p className="text-xs font-semibold uppercase tracking-widest text-brand-gold mb-3">
-                  The Team
-                </p>
-                <h2 className="font-display text-4xl sm:text-5xl font-semibold text-brand-blue">
-                  Our Leadership
-                </h2>
-              </div>
-            </FadeIn>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              {leaders.map(({ initials, name, title, bg }, i) => (
-                <FadeIn key={title} delay={i * 100}>
-                  <div className="text-center">
-                    <LeaderPhoto
-                      destination={(['leadership_1_photo', 'leadership_2_photo', 'leadership_3_photo'] as const)[i]}
-                      name={name}
-                      initials={initials}
-                      bg={bg}
-                    />
-                    <h3 className="font-display text-xl font-semibold text-brand-blue mb-1">{name}</h3>
-                    <p className="text-gray-500 text-sm">{title}</p>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      <LeadershipSection />
 
       {/* ──────────────────── 7. NEW HERE? ───────────────────────────── */}
       <section className="bg-brand-red py-20 px-4 sm:px-6 lg:px-8" aria-label="First time visitor">
