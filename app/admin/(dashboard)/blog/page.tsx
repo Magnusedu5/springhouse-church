@@ -7,6 +7,7 @@ import AdminToggle from '@/components/admin/AdminToggle';
 import SlideOver from '@/components/admin/SlideOver';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import ImageUpload from '@/components/admin/ImageUpload';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 import type { BlogPost } from '@/lib/types';
 
 const CATEGORIES: BlogPost['category'][] = ['devotional', 'teaching', 'testimony', 'missions', 'general'];
@@ -101,8 +102,18 @@ export default function BlogManagerPage() {
     try {
       if (editing) {
         await adminApi.patch(`/blog/${editing.slug}/`, draft);
+        await fetch('/api/admin/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paths: [`/blog/${editing.slug}`, '/blog'] }),
+        });
       } else {
         await adminApi.post('/blog/', draft);
+        await fetch('/api/admin/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paths: ['/blog'] }),
+        });
       }
       setPanelOpen(false);
       await load();
@@ -192,7 +203,7 @@ export default function BlogManagerPage() {
         emptyMessage="No posts yet — add your first one."
       />
 
-      <SlideOver open={panelOpen} title={editing ? 'Edit Post' : 'Add New Post'} onClose={() => setPanelOpen(false)}>
+      <SlideOver open={panelOpen} title={editing ? 'Edit Post' : 'Add New Post'} onClose={() => setPanelOpen(false)} wide>
         <form onSubmit={handleSave} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
@@ -268,14 +279,14 @@ export default function BlogManagerPage() {
           <ImageUpload value={draft.author_image} onChange={(url) => setDraft({ ...draft, author_image: url })} label="Author Image" />
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Content (HTML)</label>
-            {/* TODO: Replace with TipTap or Quill editor */}
-            <textarea
-              value={draft.content}
-              onChange={(e) => setDraft({ ...draft, content: e.target.value })}
-              rows={8}
-              className={`${fieldClass('content')} font-mono text-xs`}
+            <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+            <RichTextEditor
+              key={editing?.id ?? 'new'}
+              defaultValue={draft.content}
+              onChange={(html) => setDraft((prev) => ({ ...prev, content: html }))}
+              error={!!errors.content}
             />
+            {errors.content && <p className="text-xs text-brand-red mt-1">{errors.content}</p>}
           </div>
 
           <div>

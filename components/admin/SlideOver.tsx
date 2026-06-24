@@ -6,9 +6,10 @@ interface SlideOverProps {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
+  wide?: boolean;
 }
 
-export default function SlideOver({ open, title, onClose, children }: SlideOverProps) {
+export default function SlideOver({ open, title, onClose, children, wide = false }: SlideOverProps) {
   return (
     <div
       className={`fixed inset-0 z-50 transition-opacity duration-300 ${
@@ -20,9 +21,9 @@ export default function SlideOver({ open, title, onClose, children }: SlideOverP
     >
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       <div
-        className={`absolute top-0 right-0 h-full w-full sm:w-[480px] bg-white shadow-xl transition-transform duration-300 flex flex-col ${
-          open ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`absolute top-0 right-0 h-full w-full bg-white shadow-xl transition-transform duration-300 flex flex-col ${
+          wide ? 'sm:w-[760px]' : 'sm:w-[480px]'
+        } ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h2 className="font-display text-lg font-semibold text-brand-blue">{title}</h2>
