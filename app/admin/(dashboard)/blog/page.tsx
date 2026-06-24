@@ -127,6 +127,11 @@ export default function BlogManagerPage() {
     setDeleting(true);
     try {
       await adminApi.delete(`/blog/${deleteTarget.slug}/`);
+      await fetch('/api/admin/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paths: [`/blog/${deleteTarget.slug}`, '/blog'] }),
+      });
       setDeleteTarget(null);
       await load();
     } finally {
