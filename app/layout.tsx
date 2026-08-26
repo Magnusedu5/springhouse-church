@@ -17,6 +17,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://thespringhouse.org"),
   title: "The SpringHouse Church | Across the street, across the seas!",
   description:
     "To bring the lost to the saving knowledge of Christ and to mature believers who will minister across the seas.",
