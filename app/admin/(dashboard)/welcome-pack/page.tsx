@@ -144,7 +144,7 @@ export default function WelcomePackPage() {
           </button>
         </div>
         <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-          After deploying your site, paste your live domain here (e.g. <span className="font-mono">https://springhousechurch.org/new-member</span>) and redownload the QR code before printing.
+          After deploying your site, paste your live domain here (e.g. <span className="font-mono">https://thespringhouse.org/new-member</span>) and redownload the QR code before printing.
         </p>
       </div>
 

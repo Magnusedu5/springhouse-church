@@ -12,7 +12,7 @@ import FadedBackgroundPhoto from '@/components/FadedBackgroundPhoto';
 import { CascadeGroup, CascadeItem } from '@/components/motion';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api';
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://springhousechurch.org';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://thespringhouse.org';
 
 // ── Server-side HTML sanitiser ────────────────────────────────────────────────
 // Strips script/iframe tags and dangerous on* event handlers before rendering.

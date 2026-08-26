@@ -9,7 +9,7 @@ import ShareButtons from '@/components/ShareButtons';
 import RecordPhotoGallery from '@/components/RecordPhotoGallery';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api';
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://springhousechurch.org';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://thespringhouse.org';
 
 async function getSermon(slug: string): Promise<Sermon | null> {
   try {

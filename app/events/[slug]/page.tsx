@@ -9,7 +9,7 @@ import FadeIn from '@/components/FadeIn';
 import RecordPhotoGallery from '@/components/RecordPhotoGallery';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api';
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://springhousechurch.org';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://thespringhouse.org';
 
 // ── Inline HTML sanitiser (strips <script> and on* handlers) ─────────────────
 // Server-only; keeps safe markup like <p>, <strong>, <a>, <ul>, <li>
