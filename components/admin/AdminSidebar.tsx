@@ -19,6 +19,7 @@ import {
   LogOut,
   HandHeart,
   QrCode,
+  HandCoins,
 } from 'lucide-react';
 
 interface NavItem {
@@ -34,6 +35,7 @@ interface AdminSidebarProps {
   unreadPrayers: number;
   unreadMessages: number;
   newMinistryInterests: number;
+  unreviewedGivingEvidence: number;
   isLive: boolean;
 }
 
@@ -42,6 +44,7 @@ export default function AdminSidebar({
   unreadPrayers,
   unreadMessages,
   newMinistryInterests,
+  unreviewedGivingEvidence,
   isLive,
 }: AdminSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,6 +65,7 @@ export default function AdminSidebar({
     { href: '/admin/welcome-pack', label: 'Welcome Pack QR', icon: QrCode },
     { href: '/admin/online-members', label: 'Online Members', icon: Globe },
     { href: '/admin/messages', label: 'Messages', icon: Mail, badge: unreadMessages },
+    { href: '/admin/giving-evidence', label: 'Giving Evidence', icon: HandCoins, badge: unreviewedGivingEvidence },
     { href: '/admin#livestream', label: 'Live Stream', icon: Radio, liveDot: isLive },
   ];
 

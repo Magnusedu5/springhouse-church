@@ -10,7 +10,14 @@ async function getSidebarData() {
   const userEmail = cookieStore.get('admin_email')?.value ?? '';
 
   if (!token) {
-    return { unreadPrayers: 0, unreadMessages: 0, newMinistryInterests: 0, isLive: false, userEmail };
+    return {
+      unreadPrayers: 0,
+      unreadMessages: 0,
+      newMinistryInterests: 0,
+      unreviewedGivingEvidence: 0,
+      isLive: false,
+      userEmail,
+    };
   }
 
   try {
@@ -29,16 +36,31 @@ async function getSidebarData() {
       unreadPrayers: stats?.unread_prayers ?? 0,
       unreadMessages: stats?.unread_messages ?? 0,
       newMinistryInterests: stats?.new_ministry_interests ?? 0,
+      unreviewedGivingEvidence: stats?.unreviewed_giving_evidence ?? 0,
       isLive: live?.is_live ?? false,
       userEmail,
     };
   } catch {
-    return { unreadPrayers: 0, unreadMessages: 0, newMinistryInterests: 0, isLive: false, userEmail };
+    return {
+      unreadPrayers: 0,
+      unreadMessages: 0,
+      newMinistryInterests: 0,
+      unreviewedGivingEvidence: 0,
+      isLive: false,
+      userEmail,
+    };
   }
 }
 
 export default async function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
-  const { unreadPrayers, unreadMessages, newMinistryInterests, isLive, userEmail } = await getSidebarData();
+  const {
+    unreadPrayers,
+    unreadMessages,
+    newMinistryInterests,
+    unreviewedGivingEvidence,
+    isLive,
+    userEmail,
+  } = await getSidebarData();
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -47,6 +69,7 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
         unreadPrayers={unreadPrayers}
         unreadMessages={unreadMessages}
         newMinistryInterests={newMinistryInterests}
+        unreviewedGivingEvidence={unreviewedGivingEvidence}
         isLive={isLive}
       />
       <main className="lg:ml-[240px] pt-14 lg:pt-0 min-h-screen">

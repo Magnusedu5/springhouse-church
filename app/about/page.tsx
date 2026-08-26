@@ -392,7 +392,7 @@ export default function AboutPage() {
               {
                 step: '2',
                 title: 'Join a Service',
-                desc: 'Experience powerful worship and life-changing teaching. Our Sunday service holds every week at 9:00 AM, and our Midweek service is every Wednesday at 5:00 PM. All are welcome.',
+                desc: 'Experience powerful worship and life-changing teaching. Join us for School of the Word every Sunday at 8:00 AM, followed by our Sunday service at 9:00 AM, and our Midweek service every Wednesday at 5:00 PM. All are welcome.',
               },
               {
                 step: '3',

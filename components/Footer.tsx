@@ -180,17 +180,21 @@ export default function Footer() {
               <address className="not-italic text-white/70 text-sm leading-relaxed space-y-3">
                 <p>
                   137 Ndidem Usang Iso (Parliamentary Extension),<br />
-                  Calabar, Cross River State, Nigeria
+                  By Exceltech Filling Station, Calabar, Cross River State, Nigeria
                 </p>
                 <p>
+                  <span className="font-medium text-white">School of the Word</span><br />
+                  Sundays 8:00 AM<br />
                   <span className="font-medium text-white">Sunday Service</span><br />
                   9:00 AM<br />
                   <span className="font-medium text-white">Midweek Service</span><br />
                   Wednesdays 5:00 PM
                 </p>
-                {/* TODO: Add phone number */}
                 <p>
-                  <span className="font-medium text-white">Phone:</span> TBC
+                  <span className="font-medium text-white">Phone:</span>{' '}
+                  <a href="tel:+2348097774644" className="hover:text-white transition-colors">
+                    0809 777 4644
+                  </a>
                 </p>
                 {/* TODO: Add email address */}
                 <p>

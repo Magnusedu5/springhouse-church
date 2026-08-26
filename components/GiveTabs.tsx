@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import usePrefersReducedMotion from '@/lib/usePrefersReducedMotion';
+import GivingEvidenceForm from '@/components/GivingEvidenceForm';
 
 type Tab = 'transfer' | 'deposit' | 'sunday';
 
 // ── Bank card ─────────────────────────────────────────────────────────────────
 
-function BankCard() {
+function BankCard({ method }: { method: 'transfer' | 'deposit' }) {
   const [copied, setCopied] = useState(false);
   const reduced = usePrefersReducedMotion();
 
@@ -125,13 +126,8 @@ function BankCard() {
         </button>
       </div>
 
-      {/* WhatsApp acknowledgement note */}
-      <div className="bg-[#25D366]/10 border border-[#25D366]/20 rounded-xl p-4 text-sm text-gray-600 leading-relaxed text-center">
-        After transferring, please send your name and amount to our WhatsApp:{' '}
-        {/* TODO: Add WhatsApp number */}
-        <span className="font-semibold text-brand-blue italic">number coming soon</span>{' '}
-        — so we can acknowledge your gift. 🙏
-      </div>
+      {/* Optional proof-of-payment upload */}
+      <GivingEvidenceForm method={method} />
     </div>
   );
 }
@@ -183,7 +179,7 @@ export default function GiveTabs() {
         hidden={activeTab !== 'transfer'}
       >
         <div className="max-w-md mx-auto">
-          <BankCard />
+          <BankCard method="transfer" />
         </div>
       </div>
 
@@ -195,7 +191,7 @@ export default function GiveTabs() {
         hidden={activeTab !== 'deposit'}
       >
         <div className="max-w-md mx-auto">
-          <BankCard />
+          <BankCard method="deposit" />
           <div className="mt-7 bg-white rounded-2xl p-6 border border-gray-100">
             <h4 className="font-display text-lg font-semibold text-brand-blue mb-4">
               In-Person Deposit Instructions
@@ -210,10 +206,7 @@ export default function GiveTabs() {
               </li>
               <li>Keep your teller / deposit receipt for your records.</li>
               <li>
-                Send a photo of your receipt to our WhatsApp{' '}
-                {/* TODO: Add WhatsApp number */}
-                <span className="italic text-gray-400">(number coming soon)</span>{' '}
-                so we can acknowledge your generosity.
+                Optionally upload a photo of your receipt above so we can acknowledge your generosity.
               </li>
             </ol>
           </div>
@@ -238,8 +231,9 @@ export default function GiveTabs() {
               Give During Service
             </h4>
             <p className="text-gray-600 leading-relaxed">
-              Offerings and tithes are received during our Sunday service at{' '}
-              <strong className="text-brand-blue">9:00 AM</strong> and our Midweek service every{' '}
+              Offerings and tithes are received during School of the Word at{' '}
+              <strong className="text-brand-blue">8:00 AM</strong>, our Sunday service at{' '}
+              <strong className="text-brand-blue">9:00 AM</strong>, and our Midweek service every{' '}
               <strong className="text-brand-blue">Wednesday at 5:00 PM</strong>.
             </p>
           </div>
@@ -248,7 +242,7 @@ export default function GiveTabs() {
             Envelopes are available at the entrance.
           </div>
           <p className="text-xs text-gray-400">
-            137 Ndidem Usang Iso (Parliamentary Extension), Calabar, Nigeria
+            137 Ndidem Usang Iso (Parliamentary Extension), By Exceltech Filling Station, Calabar, Nigeria
           </p>
         </div>
       </div>

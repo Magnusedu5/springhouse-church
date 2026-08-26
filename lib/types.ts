@@ -106,6 +106,20 @@ export interface AdminStats {
   total_online_members: number;
   unread_messages: number;
   new_ministry_interests: number;
+  unreviewed_giving_evidence: number;
+}
+
+export interface GivingEvidence {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  amount: string | null;
+  method: 'transfer' | 'deposit' | 'other' | '';
+  receipt_image: string;
+  note: string;
+  submitted_at: string;
+  is_reviewed: boolean;
 }
 
 export interface MinistryInterest {

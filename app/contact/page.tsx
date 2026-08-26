@@ -139,7 +139,7 @@ export default function ContactPage() {
                   <p className="text-sm font-semibold text-brand-blue mb-0.5">Address</p>
                   <p className="text-gray-600 text-sm leading-relaxed">
                     137 Ndidem Usang Iso (Parliamentary Extension),<br />
-                    Calabar, Cross River State, Nigeria
+                    By Exceltech Filling Station, Calabar, Cross River State, Nigeria
                   </p>
                 </div>
               </div>
@@ -152,6 +152,7 @@ export default function ContactPage() {
                 <div>
                   <p className="text-sm font-semibold text-brand-blue mb-1">Service Times</p>
                   <div className="space-y-0.5 text-sm text-gray-600">
+                    <p><span className="font-medium text-brand-blue">School of the Word:</span> Sundays 8:00 AM</p>
                     <p><span className="font-medium text-brand-blue">Sunday Service:</span> 9:00 AM</p>
                     <p><span className="font-medium text-brand-blue">Midweek Service:</span> Wednesdays 5:00 PM</p>
                   </div>
@@ -159,14 +160,15 @@ export default function ContactPage() {
               </div>
             </DriftIn>
 
-            {/* Phone — TODO */}
+            {/* Phone */}
             <DriftIn direction="left" delay={0.3}>
               <div className="flex gap-3">
                 <PhoneIcon />
                 <div>
                   <p className="text-sm font-semibold text-brand-blue mb-0.5">Phone</p>
-                  {/* TODO: Add phone number */}
-                  <p className="text-gray-400 text-sm italic">Coming soon</p>
+                  <a href="tel:+2348097774644" className="text-gray-600 text-sm hover:text-brand-blue transition-colors">
+                    0809-SPRING (0809 777 4644)
+                  </a>
                 </div>
               </div>
             </DriftIn>
@@ -225,14 +227,8 @@ export default function ContactPage() {
               style={{ height: '400px' }}
               aria-label="Map showing The SpringHouse Church location in Calabar"
             >
-              {/*
-                TODO: Update coordinates with exact location.
-                Current coordinates: 4.9757° N, 8.3417° E (Calabar, CRS — approximate).
-                To use the Embed API with a real API key, replace the src below with:
-                  https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=4.9757,8.3417
-              */}
               <iframe
-                src="https://maps.google.com/maps?q=4.9757,8.3417&z=15&output=embed"
+                src="https://maps.google.com/maps?q=137+Ndidem+Usang+Iso+Parliamentary+Extension+by+Exceltech+Filling+Station+Calabar+Nigeria&z=16&output=embed"
                 width="100%"
                 height="100%"
                 loading="lazy"
