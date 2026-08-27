@@ -81,6 +81,21 @@ function getYouTubeEmbedUrl(url: string): string | null {
   return null;
 }
 
+// ── Spotify URL helper ────────────────────────────────────────────────────────
+// Spotify share links (open.spotify.com/track|episode|album|show|playlist/ID) are
+// web pages, not raw audio files — the native <audio> player can't play them.
+// Spotify's embed iframe is the only supported way to play them on a third-party site.
+
+function getSpotifyEmbed(url: string): { embedUrl: string; tall: boolean } | null {
+  const m = url.match(/open\.spotify\.com\/(?:intl-[a-z]{2}\/)?(track|episode|album|show|playlist)\/([a-zA-Z0-9]+)/);
+  if (!m) return null;
+  const [, type, id] = m;
+  return {
+    embedUrl: `https://open.spotify.com/embed/${type}/${id}?utm_source=generator&theme=0`,
+    tall: type === 'album' || type === 'show' || type === 'playlist',
+  };
+}
+
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function SermonDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -90,6 +105,7 @@ export default async function SermonDetailPage({ params }: { params: Promise<{ s
 
   const siblings = sermon.series ? await getSeriesSiblings(sermon.series, sermon.slug) : [];
   const embedUrl = sermon.video_url ? getYouTubeEmbedUrl(sermon.video_url) : null;
+  const spotifyEmbed = sermon.audio_url ? getSpotifyEmbed(sermon.audio_url) : null;
   const pageUrl = `${SITE_URL}/sermons/${sermon.slug}`;
 
   // JSON-LD structured data
@@ -167,8 +183,21 @@ export default async function SermonDetailPage({ params }: { params: Promise<{ s
 
             {/* Audio player */}
             {sermon.audio_url && (
-              <div className="mb-8">
-                <AudioPlayer audioUrl={sermon.audio_url} title={sermon.title} />
+              <div id="audio" className="mb-8">
+                {spotifyEmbed ? (
+                  <iframe
+                    src={spotifyEmbed.embedUrl}
+                    title={`Spotify player: ${sermon.title}`}
+                    width="100%"
+                    height={spotifyEmbed.tall ? 352 : 152}
+                    style={{ borderRadius: '16px' }}
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  />
+                ) : (
+                  <AudioPlayer audioUrl={sermon.audio_url} title={sermon.title} />
+                )}
               </div>
             )}
 

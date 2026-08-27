@@ -59,7 +59,7 @@ export default function AudioPlayer({ audioUrl, title }: Props) {
   const pct = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div id="audio" className="bg-brand-blue rounded-2xl p-6 sm:p-8" role="region" aria-label={`Audio player: ${title}`}>
+    <div className="bg-brand-blue rounded-2xl p-6 sm:p-8" role="region" aria-label={`Audio player: ${title}`}>
       <audio ref={ref} src={audioUrl} preload="metadata" />
 
       <div className="flex items-center justify-between mb-1">
