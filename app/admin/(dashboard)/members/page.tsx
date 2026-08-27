@@ -1,9 +1,11 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
-import { Search, Download, UserCheck, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { Search, Download, UserCheck, ChevronDown, ChevronUp, X, Trash2 } from 'lucide-react';
 import { fetchAllPages } from '@/lib/adminApi';
 import adminApi from '@/lib/adminApi';
+import ConfirmModal from '@/components/admin/ConfirmModal';
+import Toast from '@/components/admin/Toast';
 import type { Member } from '@/lib/types';
 
 type Tab = 'new' | 'existing' | 'official';
@@ -42,10 +44,11 @@ function toCsv(rows: Member[]): string {
   return [cols.join(','), ...lines].join('\n');
 }
 
-function MemberDetailModal({ member, onClose, onPromote }: {
+function MemberDetailModal({ member, onClose, onPromote, onDelete }: {
   member: Member;
   onClose: () => void;
   onPromote: (id: number) => void;
+  onDelete: (member: Member) => void;
 }) {
   const name = `${member.first_name} ${member.last_name}`.trim() || 'Anonymous';
   return (
@@ -141,6 +144,15 @@ function MemberDetailModal({ member, onClose, onPromote }: {
               Promote to Official Member
             </button>
           )}
+
+          <button
+            type="button"
+            onClick={() => { onDelete(member); onClose(); }}
+            className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 text-brand-red text-sm font-semibold rounded-xl hover:bg-red-100 transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+            Delete Member
+          </button>
         </div>
       </div>
     </div>
@@ -154,6 +166,9 @@ export default function MembersAdminPage() {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Member | null>(null);
   const [promoting, setPromoting] = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Member | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -193,6 +208,20 @@ export default function MembersAdminPage() {
       );
     } finally {
       setPromoting(null);
+    }
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await adminApi.delete(`/members/${deleteTarget.id}/`);
+      setAllMembers((prev) => prev.filter((m) => m.id !== deleteTarget.id));
+      if (selected?.id === deleteTarget.id) setSelected(null);
+      setDeleteTarget(null);
+      setToast('Member deleted');
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -271,9 +300,7 @@ export default function MembersAdminPage() {
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">Phone</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">City</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600">Registered</th>
-                  {tab !== 'official' && (
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Action</th>
-                  )}
+                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -303,19 +330,29 @@ export default function MembersAdminPage() {
                       <td className="px-4 py-3 text-gray-600">{fmt(m.phone)}</td>
                       <td className="px-4 py-3 text-gray-600">{fmt(m.city)}</td>
                       <td className="px-4 py-3 text-gray-500">{fmtDate(m.registered_at)}</td>
-                      {tab !== 'official' && (
-                        <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                      <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center gap-2">
+                          {tab !== 'official' && (
+                            <button
+                              type="button"
+                              onClick={() => promote(m.id)}
+                              disabled={promoting === m.id}
+                              className="flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 text-xs font-semibold rounded-lg hover:bg-green-200 transition-colors disabled:opacity-50"
+                            >
+                              <UserCheck className="w-3.5 h-3.5" />
+                              {promoting === m.id ? 'Promoting…' : 'Make Official'}
+                            </button>
+                          )}
                           <button
                             type="button"
-                            onClick={() => promote(m.id)}
-                            disabled={promoting === m.id}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 text-xs font-semibold rounded-lg hover:bg-green-200 transition-colors disabled:opacity-50"
+                            onClick={() => setDeleteTarget(m)}
+                            aria-label={`Delete ${(`${m.first_name} ${m.last_name}`.trim()) || 'this member'}`}
+                            className="p-1.5 text-gray-400 hover:text-brand-red rounded-md"
                           >
-                            <UserCheck className="w-3.5 h-3.5" />
-                            {promoting === m.id ? 'Promoting…' : 'Make Official'}
+                            <Trash2 className="w-4 h-4" />
                           </button>
-                        </td>
-                      )}
+                        </div>
+                      </td>
                     </tr>
                   );
                 })}
@@ -331,8 +368,20 @@ export default function MembersAdminPage() {
           member={selected}
           onClose={() => setSelected(null)}
           onPromote={(id) => promote(id)}
+          onDelete={(m) => setDeleteTarget(m)}
         />
       )}
+
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Delete member?"
+        message={`Delete ${deleteTarget ? (`${deleteTarget.first_name} ${deleteTarget.last_name}`.trim() || 'this member') : ''}? This cannot be undone.`}
+        loading={deleting}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+
+      <Toast message={toast} onDismiss={() => setToast(null)} />
     </div>
   );
 }
