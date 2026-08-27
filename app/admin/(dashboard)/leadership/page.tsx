@@ -1,33 +1,9 @@
 'use client';
 import { useEffect, useState, useRef, useCallback, type ChangeEvent } from 'react';
 import { Save, Upload, X } from 'lucide-react';
+import adminApi, { fetchAllPages } from '@/lib/adminApi';
 import Toast from '@/components/admin/Toast';
-
-const ROLES = [
-  'Resident Pastor',
-  'Church Administrator',
-  'Worship Pastor',
-  'Youth and Teens Pastor',
-  'Celebration Church Pastor',
-  "Women's Leader",
-  "Men's Leader",
-] as const;
-
-type Role = (typeof ROLES)[number];
-
-const STORAGE_KEY = 'church_leadership';
-
-interface LeaderEntry {
-  role: string;
-  name: string;
-  photo: string;
-}
-
-interface RoleState {
-  name: string;
-  photo: string;
-  dirty: boolean;
-}
+import type { LeadershipMember } from '@/lib/types';
 
 function getInitials(role: string): string {
   return role
@@ -38,73 +14,87 @@ function getInitials(role: string): string {
     .join('');
 }
 
-function loadFromStorage(): LeaderEntry[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
+interface RoleState {
+  id: number;
+  name: string;
+  photo: string;
+  dirty: boolean;
+  uploading: boolean;
 }
 
 export default function LeadershipAdminPage() {
-  const [state, setState] = useState<Record<Role, RoleState>>(() =>
-    Object.fromEntries(ROLES.map((r) => [r, { name: '', photo: '', dirty: false }])) as Record<Role, RoleState>
-  );
+  const [members, setMembers] = useState<LeadershipMember[]>([]);
+  const [state, setState] = useState<Record<number, RoleState>>({});
+  const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<string | null>(null);
-  const fileRefs = useRef<Partial<Record<Role, HTMLInputElement | null>>>({});
+  const fileRefs = useRef<Partial<Record<number, HTMLInputElement | null>>>({});
 
   useEffect(() => {
-    const saved = loadFromStorage();
-    setState(
-      Object.fromEntries(
-        ROLES.map((role) => {
-          const found = saved.find((l) => l.role === role);
-          return [role, { name: found?.name ?? '', photo: found?.photo ?? '', dirty: false }];
-        })
-      ) as Record<Role, RoleState>
-    );
+    (async () => {
+      setLoading(true);
+      try {
+        const data = await fetchAllPages<LeadershipMember>('/leadership/');
+        setMembers(data);
+        setState(
+          Object.fromEntries(
+            data.map((m) => [m.id, { id: m.id, name: m.name, photo: m.photo, dirty: false, uploading: false }])
+          )
+        );
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
-  function handleNameChange(role: Role, name: string) {
-    setState((prev) => ({ ...prev, [role]: { ...prev[role], name, dirty: true } }));
+  function handleNameChange(id: number, name: string) {
+    setState((prev) => ({ ...prev, [id]: { ...prev[id], name, dirty: true } }));
   }
 
-  function handlePhotoChange(role: Role, e: ChangeEvent<HTMLInputElement>) {
+  async function handlePhotoChange(id: number, e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const photo = ev.target?.result as string;
-      setState((prev) => ({ ...prev, [role]: { ...prev[role], photo, dirty: true } }));
-    };
-    reader.readAsDataURL(file);
+    setState((prev) => ({ ...prev, [id]: { ...prev[id], uploading: true } }));
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await adminApi.post('/upload/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setState((prev) => ({ ...prev, [id]: { ...prev[id], photo: res.data.url, dirty: true, uploading: false } }));
+    } catch {
+      setState((prev) => ({ ...prev, [id]: { ...prev[id], uploading: false } }));
+      setToast('Photo upload failed. Please try again.');
+    }
   }
 
-  function clearPhoto(role: Role) {
-    setState((prev) => ({ ...prev, [role]: { ...prev[role], photo: '', dirty: true } }));
-    const ref = fileRefs.current[role];
+  function clearPhoto(id: number) {
+    setState((prev) => ({ ...prev, [id]: { ...prev[id], photo: '', dirty: true } }));
+    const ref = fileRefs.current[id];
     if (ref) ref.value = '';
   }
 
   const handleDismiss = useCallback(() => setToast(null), []);
 
-  function saveAll() {
-    const entries: LeaderEntry[] = ROLES.map((role) => ({
-      role,
-      name: state[role]?.name ?? '',
-      photo: state[role]?.photo ?? '',
-    }));
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-    setState((prev) =>
-      Object.fromEntries(
-        ROLES.map((role) => [role, { ...prev[role], dirty: false }])
-      ) as Record<Role, RoleState>
+  async function saveAll() {
+    const dirtyIds = members.map((m) => m.id).filter((id) => state[id]?.dirty);
+    await Promise.all(
+      dirtyIds.map((id) =>
+        adminApi.patch(`/leadership/${id}/`, { name: state[id].name, photo: state[id].photo })
+      )
     );
+    setState((prev) => {
+      const next = { ...prev };
+      for (const id of dirtyIds) next[id] = { ...next[id], dirty: false };
+      return next;
+    });
     setToast('Leadership data saved. Changes are live on the About page.');
   }
 
-  const anyDirty = ROLES.some((role) => state[role]?.dirty);
+  const anyDirty = members.some((m) => state[m.id]?.dirty);
+
+  if (loading) {
+    return <div className="py-16 text-center text-gray-400 text-sm">Loading leadership team…</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -127,19 +117,20 @@ export default function LeadershipAdminPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-        {ROLES.map((role) => {
-          const entry = state[role];
-          const initials = getInitials(role);
+        {members.map((member) => {
+          const entry = state[member.id];
+          if (!entry) return null;
+          const initials = getInitials(member.role);
 
           return (
             <div
-              key={role}
+              key={member.id}
               className={`bg-white rounded-xl border shadow-sm p-5 space-y-4 transition-colors ${
                 entry.dirty ? 'border-brand-gold/60' : 'border-gray-100'
               }`}
             >
               {/* Role label */}
-              <p className="text-xs font-semibold uppercase tracking-widest text-brand-gold">{role}</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-brand-gold">{member.role}</p>
 
               {/* Photo upload + preview */}
               <div className="flex flex-col items-center gap-3">
@@ -149,21 +140,21 @@ export default function LeadershipAdminPage() {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={entry.photo}
-                        alt={entry.name || role}
+                        alt={entry.name || member.role}
                         className="w-full h-full object-cover"
                       />
                     </div>
                   ) : (
                     <div className="w-24 h-24 rounded-full bg-brand-cream flex items-center justify-center ring-2 ring-brand-gold/20">
                       <span className="font-display text-xl font-semibold text-brand-blue/30 select-none">
-                        {initials}
+                        {entry.uploading ? '…' : initials}
                       </span>
                     </div>
                   )}
                   {entry.photo && (
                     <button
                       type="button"
-                      onClick={() => clearPhoto(role)}
+                      onClick={() => clearPhoto(member.id)}
                       aria-label="Remove photo"
                       className="absolute -top-1 -right-1 w-5 h-5 bg-brand-red text-white rounded-full flex items-center justify-center hover:bg-[#a82126] transition-colors"
                     >
@@ -173,35 +164,38 @@ export default function LeadershipAdminPage() {
                 </div>
 
                 <input
-                  ref={(el) => { fileRefs.current[role] = el; }}
+                  ref={(el) => { fileRefs.current[member.id] = el; }}
                   type="file"
                   accept="image/*"
-                  id={`photo-${role}`}
+                  id={`photo-${member.id}`}
                   className="sr-only"
-                  onChange={(e) => handlePhotoChange(role, e)}
+                  onChange={(e) => handlePhotoChange(member.id, e)}
+                  disabled={entry.uploading}
                 />
                 <label
-                  htmlFor={`photo-${role}`}
-                  className="flex items-center gap-1.5 text-xs font-medium text-brand-blue border border-brand-blue/30 px-3 py-1.5 rounded-full cursor-pointer hover:bg-brand-blue/5 transition-colors"
+                  htmlFor={`photo-${member.id}`}
+                  className={`flex items-center gap-1.5 text-xs font-medium text-brand-blue border border-brand-blue/30 px-3 py-1.5 rounded-full cursor-pointer hover:bg-brand-blue/5 transition-colors ${
+                    entry.uploading ? 'opacity-50 pointer-events-none' : ''
+                  }`}
                 >
                   <Upload className="w-3.5 h-3.5" aria-hidden="true" />
-                  {entry.photo ? 'Change Photo' : 'Upload Photo'}
+                  {entry.uploading ? 'Uploading…' : entry.photo ? 'Change Photo' : 'Upload Photo'}
                 </label>
               </div>
 
               {/* Name input */}
               <div>
                 <label
-                  htmlFor={`name-${role}`}
+                  htmlFor={`name-${member.id}`}
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Name
                 </label>
                 <input
-                  id={`name-${role}`}
+                  id={`name-${member.id}`}
                   type="text"
                   value={entry.name}
-                  onChange={(e) => handleNameChange(role, e.target.value)}
+                  onChange={(e) => handleNameChange(member.id, e.target.value)}
                   placeholder="TBA"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue"
                 />
@@ -225,7 +219,7 @@ export default function LeadershipAdminPage() {
                   )}
                   <div className="min-w-0">
                     <p className="text-xs font-semibold uppercase tracking-widest text-brand-gold leading-tight truncate">
-                      {role}
+                      {member.role}
                     </p>
                     <p className="font-display text-sm font-semibold text-brand-blue truncate">
                       {entry.name || 'TBA'}

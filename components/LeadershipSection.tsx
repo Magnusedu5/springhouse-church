@@ -2,24 +2,7 @@
 import { useEffect, useState } from 'react';
 import FadeIn from '@/components/FadeIn';
 import { CascadeGroup, CascadeItem } from '@/components/motion';
-
-const ROLES = [
-  'Resident Pastor',
-  'Church Administrator',
-  'Worship Pastor',
-  'Youth and Teens Pastor',
-  'Celebration Church Pastor',
-  "Women's Leader",
-  "Men's Leader",
-] as const;
-
-const STORAGE_KEY = 'church_leadership';
-
-interface LeaderEntry {
-  role: string;
-  name: string;
-  photo: string;
-}
+import type { LeadershipMember } from '@/lib/types';
 
 const PLACEHOLDER_COLORS = [
   'bg-brand-blue/10',
@@ -41,21 +24,20 @@ function getInitials(role: string): string {
 }
 
 export default function LeadershipSection() {
-  const [leaders, setLeaders] = useState<LeaderEntry[]>([]);
+  const [leaders, setLeaders] = useState<LeadershipMember[]>([]);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setLeaders(JSON.parse(raw));
-    } catch {
-      // ignore parse errors
-    }
+    const base = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api';
+    fetch(`${base}/leadership/`)
+      .then((r) => r.json())
+      .then((data) => {
+        const list = Array.isArray(data) ? data : (data?.results ?? []);
+        setLeaders(list);
+      })
+      .catch(() => setLeaders([]));
   }, []);
 
-  const displayLeaders = ROLES.map((role) => {
-    const saved = leaders.find((l) => l.role === role);
-    return { role, name: saved?.name ?? '', photo: saved?.photo ?? '' };
-  });
+  if (leaders.length === 0) return null;
 
   return (
     <section className="bg-brand-cream py-20 px-4 sm:px-6 lg:px-8" aria-label="Leadership team">
@@ -72,7 +54,7 @@ export default function LeadershipSection() {
         </FadeIn>
 
         <CascadeGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayLeaders.map(({ role, name, photo }, i) => (
+          {leaders.map(({ role, name, photo }, i) => (
             <CascadeItem key={role}>
               <div className="text-center">
                 {photo ? (
@@ -86,7 +68,7 @@ export default function LeadershipSection() {
                   </div>
                 ) : (
                   <div
-                    className={`mx-auto mb-4 w-32 h-32 rounded-full ${PLACEHOLDER_COLORS[i]} flex items-center justify-center ring-2 ring-brand-gold/30`}
+                    className={`mx-auto mb-4 w-32 h-32 rounded-full ${PLACEHOLDER_COLORS[i % PLACEHOLDER_COLORS.length]} flex items-center justify-center ring-2 ring-brand-gold/30`}
                   >
                     <span className="font-display text-2xl font-semibold text-brand-blue/40 select-none">
                       {getInitials(role)}

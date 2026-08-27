@@ -109,6 +109,14 @@ export interface AdminStats {
   unreviewed_giving_evidence: number;
 }
 
+export interface LeadershipMember {
+  id: number;
+  role: string;
+  name: string;
+  photo: string;
+  order: number;
+}
+
 export interface GivingEvidence {
   id: number;
   name: string;
