@@ -83,6 +83,18 @@ export default function MinistriesManagerPage() {
     return Object.keys(next).length === 0;
   }
 
+  async function revalidate(paths: string[]) {
+    try {
+      await fetch('/api/admin/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paths }),
+      });
+    } catch {
+      // Non-fatal — the page will still refresh on its own within the normal ISR window.
+    }
+  }
+
   async function handleSave(e: FormEvent) {
     e.preventDefault();
     if (!validate()) return;
@@ -90,8 +102,13 @@ export default function MinistriesManagerPage() {
     try {
       if (editing) {
         await adminApi.patch(`/ministries/${editing.slug}/`, draft);
+        // Unlike Sermons/Events, the Ministries archive itself is also
+        // server-rendered/ISR-cached (not client-fetched), so it needs
+        // revalidating too, not just the detail page.
+        await revalidate([`/ministries/${editing.slug}`, '/ministries']);
       } else {
         await adminApi.post('/ministries/', draft);
+        await revalidate(['/ministries']);
       }
       setPanelOpen(false);
       await load();
@@ -105,6 +122,7 @@ export default function MinistriesManagerPage() {
     setDeleting(true);
     try {
       await adminApi.delete(`/ministries/${deleteTarget.slug}/`);
+      await revalidate([`/ministries/${deleteTarget.slug}`, '/ministries']);
       setDeleteTarget(null);
       await load();
     } finally {

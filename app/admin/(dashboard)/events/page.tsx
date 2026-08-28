@@ -98,6 +98,18 @@ export default function EventsManagerPage() {
     return Object.keys(next).length === 0;
   }
 
+  async function revalidate(paths: string[]) {
+    try {
+      await fetch('/api/admin/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paths }),
+      });
+    } catch {
+      // Non-fatal — the page will still refresh on its own within the normal ISR window.
+    }
+  }
+
   async function handleSave(e: FormEvent) {
     e.preventDefault();
     if (!validate()) return;
@@ -105,6 +117,9 @@ export default function EventsManagerPage() {
     try {
       if (editing) {
         await adminApi.patch(`/events/${editing.slug}/`, draft);
+        // Only the detail page is server-rendered/ISR-cached — the archive
+        // listing and homepage preview are client-fetched and always live.
+        await revalidate([`/events/${editing.slug}`]);
       } else {
         await adminApi.post('/events/', draft);
       }
@@ -120,6 +135,7 @@ export default function EventsManagerPage() {
     setDeleting(true);
     try {
       await adminApi.delete(`/events/${deleteTarget.slug}/`);
+      await revalidate([`/events/${deleteTarget.slug}`]);
       setDeleteTarget(null);
       await load();
     } finally {

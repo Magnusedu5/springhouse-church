@@ -108,6 +108,18 @@ export default function SermonsManagerPage() {
     return Object.keys(next).length === 0;
   }
 
+  async function revalidate(paths: string[]) {
+    try {
+      await fetch('/api/admin/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paths }),
+      });
+    } catch {
+      // Non-fatal — the page will still refresh on its own within the normal ISR window.
+    }
+  }
+
   async function handleSave(e: FormEvent) {
     e.preventDefault();
     if (!validate()) return;
@@ -115,6 +127,9 @@ export default function SermonsManagerPage() {
     try {
       if (editing) {
         await adminApi.patch(`/sermons/${editing.slug}/`, draft);
+        // Only the detail page is server-rendered/ISR-cached — the archive
+        // listing and homepage preview are client-fetched and always live.
+        await revalidate([`/sermons/${editing.slug}`]);
       } else {
         await adminApi.post('/sermons/', draft);
       }
@@ -130,6 +145,7 @@ export default function SermonsManagerPage() {
     setDeleting(true);
     try {
       await adminApi.delete(`/sermons/${deleteTarget.slug}/`);
+      await revalidate([`/sermons/${deleteTarget.slug}`]);
       setDeleteTarget(null);
       await load();
     } finally {
