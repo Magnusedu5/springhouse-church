@@ -181,6 +181,7 @@ export type GalleryDestination =
   | 'logo' | 'pastor_photo'
   | 'leadership_1_photo' | 'leadership_2_photo' | 'leadership_3_photo'
   | 'congregation'
+  | 'hero_memorial' | 'bg_memorial' | 'memorial_portrait' | 'memorial_gallery'
   | 'ministry_children' | 'ministry_youth' | 'ministry_men'
   | 'ministry_women' | 'ministry_missions' | 'ministry_worship'
   | 'event' | 'sermon';

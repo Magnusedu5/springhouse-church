@@ -21,7 +21,7 @@ import type { ChurchPhoto, GalleryDestination, ChurchEvent, Sermon } from '@/lib
 
 // ── Destination metadata ──────────────────────────────────────────────────────
 
-type DestinationGroup = 'hero' | 'background' | 'feature' | 'ministry' | 'congregation' | 'linked';
+type DestinationGroup = 'hero' | 'background' | 'feature' | 'ministry' | 'congregation' | 'memorial' | 'linked';
 
 interface DestinationMeta {
   key: GalleryDestination;
@@ -69,6 +69,12 @@ const DESTINATIONS: DestinationMeta[] = [
   // Congregation gallery (About page)
   { key: 'congregation', label: 'Congregation Gallery', description: 'Appears in the community photo grid on the About page.', icon: Users, group: 'congregation' },
 
+  // Memorial page — Pastor Eve Mboso
+  { key: 'memorial_portrait', label: 'Memorial: Main Portrait', description: 'Her main portrait at the top of the Remembering Pastor Eve page. Replaces the built-in photo.', icon: User, group: 'memorial' },
+  { key: 'hero_memorial', label: 'Memorial: Hero Background', description: 'Background image behind the hero at the top of the Remembering Pastor Eve page.', icon: ImageIcon, group: 'memorial' },
+  { key: 'bg_memorial', label: 'Memorial: Section Background', description: 'Faded background behind the story section on the Remembering Pastor Eve page.', icon: ImageIcon, group: 'memorial' },
+  { key: 'memorial_gallery', label: 'Memorial: Photo Gallery', description: 'Photos of her life and ministry, shown as a photo stack on the Remembering Pastor Eve page.', icon: Images, group: 'memorial' },
+
   // Group 4 — Link to a specific record
   { key: 'event', label: 'For a Specific Event', description: 'Photos shown on one event\'s detail page.', icon: CalendarDays, group: 'linked' },
   { key: 'sermon', label: 'For a Specific Sermon', description: 'Photos shown on one sermon\'s detail page.', icon: Mic, group: 'linked' },
@@ -82,6 +88,7 @@ const GROUP_LABELS: Record<DestinationGroup, string> = {
   feature: 'Feature Photos',
   ministry: 'Ministries',
   congregation: 'Congregation',
+  memorial: 'Remembering Pastor Eve',
   linked: 'Link to a Specific Record',
 };
 
@@ -94,6 +101,7 @@ const FILTER_TABS: { key: string; label: string; match: (d: GalleryDestination) 
   { key: 'event', label: 'Events', match: (d) => d === 'event' },
   { key: 'sermon', label: 'Sermons', match: (d) => d === 'sermon' },
   { key: 'congregation', label: 'Congregation', match: (d) => d === 'congregation' },
+  { key: 'memorial', label: 'Pastor Eve', match: (d) => d.endsWith('_memorial') || d.startsWith('memorial_') },
 ];
 
 function stripExtension(filename: string): string {
@@ -556,7 +564,7 @@ export default function GalleryManagerPage() {
           1. Choose where this photo will appear
         </h2>
 
-        {(['hero', 'background', 'feature', 'ministry', 'congregation', 'linked'] as DestinationGroup[]).map((group) => (
+        {(['hero', 'background', 'feature', 'ministry', 'congregation', 'memorial', 'linked'] as DestinationGroup[]).map((group) => (
           <div key={group}>
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
               {GROUP_LABELS[group]}

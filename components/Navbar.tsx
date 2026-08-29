@@ -14,6 +14,7 @@ const navLinks = [
   { href: '/events', label: 'Events' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
+  { href: '/remembering-pastor-eve', label: 'Pastor Eve' },
 ];
 
 const NAV_H = 80; // matches h-20
